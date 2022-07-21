@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/c":{"guestpath":"/home/vagrant/c","hostpath":"C:/","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/sparkmulti","disabled":false,"__vagrantfile":true}}}

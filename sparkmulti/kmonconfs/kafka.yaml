@@ -1,0 +1,8 @@
+---
+  clusters:
+    cluster-1:
+      broker_list:
+        - "not-needed-for-rolling-restart:9092"
+      zookeeper: "192.168.50.2:2181"  # change to your zookeeper IP
+  local_config:
+    cluster: cluster-1

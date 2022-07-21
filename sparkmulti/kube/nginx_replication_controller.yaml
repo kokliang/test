@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myrs
+spec:
+  replicas: 4
+  selector:
+      matchLabels:
+        rsl: rslabel
+  template:
+   metadata: 
+     name: nginxrc
+     labels:
+      rsl: rslabel
+   spec:
+    containers:
+    - name: mrscontainer
+      image: nginx:1.16
+     

@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: apps/v1
+metadata: 
+  name: my-exip-service
+spec:
+  ports: 
+   - name: http
+     port: 9080
+     nodePort: 9080
+  type: 
+    LoadBalancer:
+      externalIPs:
+        - 192.168.56.25

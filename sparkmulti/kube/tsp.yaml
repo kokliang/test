@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # test spark container
+  name: tspc
+  labels:
+    whatfor: sparktest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      whatfor: sparktest
+  template:
+    metadata:
+      labels:
+        whatfor: sparktest
+    spec:
+      containers:
+      - image: apache/spark
+        name: tspc

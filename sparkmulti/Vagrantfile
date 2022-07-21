@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Avoid having the worker starting before the master node
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
+
+Vagrant.configure(2) do |config|
+
+# end
+config.vm.synced_folder 'C:\\', '/home/vagrant/c'
+
+  # Master Node
+  config.vm.define "master" do |master|
+    master.vm.box = "centos7bd"
+	master.vm.hostname = "master.e4rlearning.com"
+    master.hostmanager.aliases = "master"
+    master.vm.network "private_network", ip: "192.168.56.2"
+    master.vm.provision "file", source: "kconfs/server.properties.master.xzkauth", destination: "/home/vagrant/confluent/etc/kafka/server.properties"
+    master.vm.provision "file", source: "kconfs/server.properties.master.xzkauth", destination: "/home/vagrant/confluent/etc/kafka/server.properties.xzkauth"
+    master.vm.provision "file", source: "kconfs/server.properties.master.zkauth", destination: "/home/vagrant/confluent/etc/kafka/server.properties.zkauth"
+  
+    master.vm.provision "file", source: "cassconfigs/cassandra.yaml", destination: "/home/vagrant/cassandra/conf/cassandra.yaml"
+
+    master.vm.provider "virtualbox" do |v|
+      v.name = "kmaster"
+      v.memory = 7168
+      v.cpus = 4
+    #   v.gui = true
+    end
+    # below not needed as the services are configured common across machines
+    master.vm.provision "shell", inline: "
+    cp /vagrant/kconfs/kafka.service.master /etc/systemd/system/kafka.service
+    "
+    master.vm.provision "shell", inline: "
+    sudo systemctl start docker
+    sudo systemctl star zookeeper
+    docker run -d -p 9001:9000  elkozmon/zoonavigator:latest
+    docker run -d -p 9000:9000 -e ZK_HOSTS=master.e4rlearning.com:2181 hlebalbau/kafka-manager:stable
+    docker run -d -p 8001:8000 -e KAFKA_REST_PROXY_URL=192.168.56.2:8082 -e PROXY=true landoop/kafka-topics-ui
+    ", run: "always"
+    
+  end
+
+  NodeCount = 3
+
+  (1..NodeCount).each do |i|
+    config.vm.define "node#{i}" do |worker|
+      worker.vm.box = "centos7bd"      
+	  worker.vm.hostname = "node#{i}.e4rlearning.com"
+      worker.hostmanager.aliases = "node#{i}"
+	worker.vm.network "private_network", ip: "192.168.56.#{2 + i}"
+    worker.vm.provision "shell", path: "bootstrap_worker.sh"
+    worker.vm.provision "file", source: "kconfs/server.properties.node#{i}.xzkauth", destination: "/home/vagrant/confluent/etc/kafka/server.properties"
+      worker.vm.provision "file", source: "kconfs/server.properties.node#{i}.xzkauth", destination: "/home/vagrant/confluent/etc/kafka/server.properties.xzkauth"
+      worker.vm.provision "file", source: "kconfs/server.properties.node#{i}.zkauth", destination: "/home/vagrant/confluent/etc/kafka/server.properties.zkauth"
+       worker.vm.provision "shell", inline:"cp /vagrant/kconfs/kafka.service.node#{i} /etc/systemd/system/kafka.service"
+      worker.vm.provision "file", source: "cassconfigs/cassandra#{i+1}.yaml", destination: "/home/vagrant/cassandra/conf/cassandra.yaml"
+      worker.vm.provider "virtualbox" do |v|
+        v.name = "knode#{i}"
+        v.memory = 4096
+        v.cpus = 2
+        # v.gui = true
+      end
+    end
+  end
+
+end

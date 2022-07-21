@@ -1,0 +1,58 @@
+# admin will be the dns server
+# clients will be admin, master, node1 etc 
+# domain name will be e4rlearning.com
+sudo yum install -y bind bind-utils
+# will create forward.e4rlearning.com and reverse.e4rlearning.com
+# in /etc/named.conf add the ip of the dns server as in
+options {
+        listen-on port 53 { 127.0.0.1;192.168.56.5; };
+# make changes for the zones
+zone "e4rlearning.com" IN {
+        type master;
+        file "forward.e4rlearning";
+        allow-update { none; };
+};
+
+zone "56.168.192.in-addr.arpa" IN {
+        type master;
+        file "reverse.e4relarning";
+        allow-update { none; };
+};
+
+# put this /var/named/forward.e4rlearning 
+$TTL 86400
+@ IN SOA masterdns.e4rlearning.com. root.e4rlearning.com. (
+    2011071001  ;Serial
+    3600        ;Refresh
+    1800        ;Retry
+    604800      ;Expire
+    86400       ;Minimum TTL
+)
+@ IN NS masterdns.e4rlearning.com.
+@ IN A 192.168.50.5
+masterdns   IN A 192.168.50.5
+admin       IN A 192.168.50.5
+master      IN A 192.168.50.2
+node1       IN A 192.168.50.3
+node2       IN A 192.168.50.4
+node3       IN A 192.168.50.6
+
+put this in /var/named/reverse.e4rlearning
+$TTL 86400
+@ IN SOA masterdns.e4rlearning.com. root.e4rlearning.com. (
+    2011071001  ;Serial
+    3600        ;Refresh
+    1800        ;Retry
+    604800      ;Expire
+    86400       ;Minimum TTL
+)
+@ IN NS masterdns.e4rlearning.com.
+@ IN PTR e4rlearning.com.
+masterdns       IN  A   192.168.50.5
+5               IN PTR  masterdns.e4rlearning.com.
+2               IN PTR  master.e4rlearning.com.
+3               IN PTR  node1.e4rlearning.com.
+4               IN PTR  node2.e4rlearning.com.
+6               IN PTR  node3.e4rlearning.com.
+
+# masterdns above is admin so it has to be replaced by admin

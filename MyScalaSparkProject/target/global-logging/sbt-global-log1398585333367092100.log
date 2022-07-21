@@ -1,0 +1,8 @@
+[debug] > Exec({file:/C:/MyScalaSparkProject/}root/package, None, None)
+[debug] Evaluating tasks: Compile / package
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] multiple main classes detected: run 'show discoveredMainClasses' to see the list
+[success] Total time: 0 s, completed Jul 19, 2022, 3:35:52 PM
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)

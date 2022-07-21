@@ -1,0 +1,13 @@
+{
+    "name": "cass-source-fotable",
+    "config": {
+        "tasks.max": "1",
+        "connector.class": "com.datamountaineer.streamreactor.connect.cassandra.source.CassandraSourceConnector",
+        "connect.cassandra.contact.points": "master.e4rlearning.com",
+        "connect.cassandra.port": 9042,
+        "connect.cassandra.consistency.level": "LOCAL_ONE",
+        "connect.cassandra.key.space": "finks",
+        "connect.cassandra.import.mode": "incremental",
+        "connect.cassandra.kcql": "INSERT INTO focass-source select symbol, expiry, trdate, instrument, option_typ, strike_pr, chgoi, contracts, cpr, oi, trdval, tstamp from fotable PK tstamp INCREMENTALMODE=TIMESTAMP"
+    }
+}

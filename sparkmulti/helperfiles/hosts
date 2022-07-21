@@ -1,0 +1,6 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.56.2 master.e4rlearning.com master
+192.168.56.3 node1.e4rlearning.com node1
+192.168.56.4 node2.e4rlearning.com node2
+192.168.56.5 admin.e4rlearning.com node3

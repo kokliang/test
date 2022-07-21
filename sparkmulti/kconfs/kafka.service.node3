@@ -1,0 +1,15 @@
+[Unit]
+Description=Apache Kafka server (broker)
+Documentation=http://kafka.apache.org/documentation.html
+
+
+[Service]
+Type=simple
+Environment="KAFKA_HEAP_OPTS=-Xmx256M -Xms128M"
+Environment="KAFKA_OPTS=-Djava.security.auth.login.config=/vagrant/kconfs/kafka_server_node3_jaas.conf -javaagent:/home/vagrant/prometheus/jmx_prometheus_javaagent-0.16.1.jar=8080:/home/vagrant/prometheus/kafka-2_0_0.yml -javaagent:/home/vagrant/jolokia/jolokia-jvm-1.7.0.jar=host=*"
+ExecStartPre=/bin/bash -c '(while ! nc -z -v -w1 master.e4rlearning.com 2181 2>/dev/null; do echo "Waiting for port 2181 on master.e4rlearning.com to open..."; sleep 2; done); sleep 10'
+ExecStart=/home/vagrant/confluent/bin/kafka-server-start /home/vagrant/confluent/etc/kafka/server.properties
+ExecStop=/home/vagrant/confluent/bin/kafka-server-stop
+
+[Install]
+WantedBy=multi-user.target

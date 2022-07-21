@@ -1,0 +1,19 @@
+$TTL 86400
+@ IN SOA master.e4rlearning.com. root.e4rlearning.com. (
+    2011071001  ;Serial
+    3600        ;Refresh
+    1800        ;Retry
+    604800      ;Expire
+    86400       ;Minimum TTL
+)
+@ IN NS master.e4rlearning.com.
+@ IN PTR e4rlearning.com.
+master      IN  A   192.168.56.2
+node1       IN  A   192.168.56.3
+node2       IN  A   192.168.56.4
+node3       IN  A   192.168.56.5
+2               IN PTR  master.e4rlearning.com.
+3               IN PTR  node1.e4rlearning.com.
+4               IN PTR  node2.e4rlearning.com.
+5               IN PTR  node3.e4rlearning.com.
+

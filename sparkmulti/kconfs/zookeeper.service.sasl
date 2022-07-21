@@ -1,0 +1,15 @@
+[Unit]
+Description=Apache Zookeeper server
+Documentation=http://zookeeper.apache.org
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=simple
+Environment="KAFKA_HEAP_OPTS=-Xmx256M -Xms128M"
+Environment="KAFKA_OPTS=-Djava.security.auth.login.config=/vagrant/kconfs/zookeeper_jaas.conf -Dzookeeper.4lw.commands.whitelist=*"
+ExecStart=/home/vagrant/confluent/bin/zookeeper-server-start /home/vagrant/confluent/etc/kafka/zookeeper.properties
+ExecStop=/home/vagrant/confluent/bin/zookeeper-server-stop
+
+[Install]
+WantedBy=multi-user.target

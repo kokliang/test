@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx
+spec:
+  rules:
+   - host: ng.example.com
+     http:
+      paths:
+       - path: /
+         backend:
+           serviceName: nginx-nodeport
+           servicePort: 80
+          

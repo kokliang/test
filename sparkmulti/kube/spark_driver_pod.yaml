@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sparkdriverpod
+  labels:
+   app: sparkubecl
+spec:
+  containers:
+    - image: samar67/spark:3.3.0
+      name: sdcontainer
+      command: ["bash"]
